@@ -1,0 +1,252 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Tests\\WeeklyPlanner.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj",
+        "projectName": "WeeklyPlanner.Core",
+        "projectPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj",
+        "packagesPath": "C:\\Users\\adati\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\adati\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Infrastructure\\WeeklyPlanner.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Infrastructure\\WeeklyPlanner.Infrastructure.csproj",
+        "projectName": "WeeklyPlanner.Infrastructure",
+        "projectPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Infrastructure\\WeeklyPlanner.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\adati\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\adati\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj": {
+                "projectPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[10.0.3, )"
+            },
+            "Microsoft.Extensions.Configuration.FileExtensions": {
+              "target": "Package",
+              "version": "[10.0.3, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[10.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Tests\\WeeklyPlanner.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Tests\\WeeklyPlanner.Tests.csproj",
+        "projectName": "WeeklyPlanner.Tests",
+        "projectPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Tests\\WeeklyPlanner.Tests.csproj",
+        "packagesPath": "C:\\Users\\adati\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\adati\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj": {
+                "projectPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Core\\WeeklyPlanner.Core.csproj"
+              },
+              "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Infrastructure\\WeeklyPlanner.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\adati\\Desktop\\Projects\\weekly-planner\\WeeklyPlanner.Infrastructure\\WeeklyPlanner.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[8.8.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.72, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
