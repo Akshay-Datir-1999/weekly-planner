@@ -3,6 +3,7 @@ using WeeklyPlanner.API.Middleware;
 using WeeklyPlanner.Core.Interfaces;
 using WeeklyPlanner.Infrastructure.Data;
 using WeeklyPlanner.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────────────────
@@ -22,11 +23,9 @@ builder.Services.AddSwaggerGen(c =>
 
 // ── CORS ──────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-    policy.WithOrigins(
-        "http://localhost:4200",
-        "https://localhost:4200",
-        "https://YOUR-APP.azurestaticapps.net"  // update on Day 4
-    ).AllowAnyHeader().AllowAnyMethod()));
+    policy.AllowAnyOrigin()
+          .AllowAnyHeader()
+          .AllowAnyMethod()));
 
 var app = builder.Build();
 
