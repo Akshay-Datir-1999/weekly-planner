@@ -1,0 +1,91 @@
+<!-- Loading spinner -->
+<div *ngIf="isLoading" class="loading-center">
+  <mat-spinner diameter="48"></mat-spinner><p>Loading your plan...</p>
+</div>
+
+<div *ngIf="!isLoading">
+  <!-- Error banner -->
+  <mat-card class="error-card" *ngIf="errorMessage">
+    <mat-icon color="warn">error</mat-icon> {{ errorMessage }}
+  </mat-card>
+
+  <!-- Week info + hour budget -->
+  <mat-card class="week-card" *ngIf="currentWeek">
+    <h2>Week: {{ currentWeek.weekStartDate | date }} -- {{ currentWeek.weekEndDate | date }}</h2>
+    <div class="category-bars">
+      <div *ngFor="let cat of [1,2,3]" class="cat-row">
+        <span>{{ categoryLabel(cat) }}: {{ catUsed(cat) }}/{{ [cat1Max, cat2Max, cat3Max][cat-1] }} hrs</span>
+        <mat-progress-bar [value]="(catUsed(cat)/[cat1Max,cat2Max,cat3Max][cat-1])*100"
+          [color]="catUsed(cat) > [cat1Max,cat2Max,cat3Max][cat-1] ? 'warn' : 'primary'">
+        </mat-progress-bar>
+      </div>
+    </div>
+    <p [class.over-limit]="hoursLeft < 0">
+      <strong>Hours remaining: {{ hoursLeft }}</strong> / 30
+    </p>
+  </mat-card>
+
+  <!-- PLANNING MODE (before freeze) -->
+  <ng-container *ngIf="!isSubmitted">
+    <h2>Pick from Backlog</h2>
+    <div class="backlog-grid">
+      <mat-card *ngFor="let item of backlogItems" class="backlog-item">
+        <mat-card-title>{{ item.title }}</mat-card-title>
+        <mat-card-subtitle>Cat {{ item.category }}: {{ categoryLabel(item.category) }}</mat-card-subtitle>
+        <mat-card-content>{{ item.description }}</mat-card-content>
+        <mat-card-actions>
+          <button mat-stroked-button (click)="addItem(item)">+ Add</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <h2>My Plan</h2>
+    <div *ngFor="let entry of selectedEntries" class="plan-row">
+      <span>{{ entry.backlogItem?.title }}</span>
+      <mat-form-field appearance="outline" style="width:120px">
+        <mat-label>Hours</mat-label>
+        <input matInput type="number" min="0" max="30" step="0.5"
+          [(ngModel)]="entry.plannedHours" (ngModelChange)="updateHours(entry, $event)">
+      </mat-form-field>
+      <button mat-icon-button color="warn" (click)="removeItem(entry)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="submitPlan()"
+      [disabled]="selectedEntries.length===0">
+      🔒 Submit & Freeze Plan
+    </button>
+  </ng-container>
+
+  <!-- FROZEN MODE (after freeze) -->
+  <ng-container *ngIf="isSubmitted">
+    <mat-card class="frozen-banner">
+      <mat-icon>lock</mat-icon>
+      <strong> Plan is FROZEN</strong> — Update your progress below
+    </mat-card>
+
+    <div *ngFor="let entry of selectedEntries" class="progress-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ entry.backlogItem?.title }}</mat-card-title>
+          <mat-card-subtitle>
+            Planned: {{ entry.plannedHours }} hrs | Cat: {{ categoryLabel(entry.backlogItem?.category ?? 1) }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Progress: {{ entry.progressPercent }}%</p>
+          <mat-slider min="0" max="100" step="5" style="width:100%">
+            <input matSliderThumb [(ngModel)]="entry.progressPercent"
+              (ngModelChange)="saveProgress(entry)">
+          </mat-slider>
+          <mat-form-field appearance="outline">
+            <mat-label>Actual Hours (optional)</mat-label>
+            <input matInput type="number" min="0" step="0.5"
+              [(ngModel)]="entry.actualHours" (change)="saveProgress(entry)">
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</div>

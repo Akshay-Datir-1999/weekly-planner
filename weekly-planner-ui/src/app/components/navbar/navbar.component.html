@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+  <span>📅 Weekly Planner</span>
+  <span class="spacer" style="flex:1"></span>
+  <button mat-button routerLink="/backlog">Backlog</button>
+  <button mat-button routerLink="/planning">My Plan</button>
+  <button mat-button *ngIf="isLeadRoute()" routerLink="/dashboard">Dashboard</button>
+  <button mat-button *ngIf="isLeadRoute()" routerLink="/weeks">Weeks</button>
+  <mat-select [(ngModel)]="selected" (ngModelChange)="onSwitch($event)"
+    style="width:160px; margin:0 12px; color:white">
+    <mat-option *ngFor="let m of members" [value]="m">
+      {{ m.name }} {{ m.isLead ? '👑' : '' }}
+    </mat-option>
+  </mat-select>
+  <button mat-icon-button (click)="toggleDark()" title="Toggle dark mode">
+    <mat-icon>{{ isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+</mat-toolbar>
