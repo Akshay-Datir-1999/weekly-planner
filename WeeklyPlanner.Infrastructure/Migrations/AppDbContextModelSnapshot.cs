@@ -137,6 +137,7 @@ namespace WeeklyPlanner.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal?>("ActualHours")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("BacklogItemId")
@@ -146,9 +147,11 @@ namespace WeeklyPlanner.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("PlannedHours")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("ProgressPercent")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("WeeklyPlanId")
@@ -170,12 +173,15 @@ namespace WeeklyPlanner.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Category1Percent")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Category2Percent")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Category3Percent")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")

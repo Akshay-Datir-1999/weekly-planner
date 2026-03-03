@@ -1,21 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace WeeklyPlanner.Infrastructure.Data;
 
 /// <summary>
-/// Design-time factory used by EF Core tools to create AppDbContext
-/// when running migrations.
-/// This avoids dependency injection issues at design time.
+/// Used ONLY by EF Core CLI tools (dotnet ef migrations, dotnet ef database update).
+/// Not used at runtime — the real DbContext is registered in Program.cs.
 /// </summary>
 public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        // Build configuration so we can read appsettings.Development.json
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(),
+                "../WeeklyPlanner.API"))          // points to WeeklyPlanner.API folder
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json", optional: true)
+            .Build();
 
-        // SQLite database file will be created in the root folder
-        optionsBuilder.UseSqlite("Data Source=WeeklyPlanner.db");
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseSqlite(
+            configuration.GetConnectionString("DefaultConnection"));
 
         return new AppDbContext(optionsBuilder.Options);
     }

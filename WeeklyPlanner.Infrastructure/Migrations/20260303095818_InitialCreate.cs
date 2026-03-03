@@ -52,9 +52,9 @@ namespace WeeklyPlanner.Infrastructure.Migrations
                     PlanningDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     WeekStartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     WeekEndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Category1Percent = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Category2Percent = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Category3Percent = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Category1Percent = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    Category2Percent = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    Category3Percent = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -98,9 +98,9 @@ namespace WeeklyPlanner.Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     WeeklyPlanId = table.Column<int>(type: "INTEGER", nullable: false),
                     BacklogItemId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PlannedHours = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ProgressPercent = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ActualHours = table.Column<decimal>(type: "TEXT", nullable: true),
+                    PlannedHours = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    ProgressPercent = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false),
+                    ActualHours = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: true),
                     LastUpdated = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
