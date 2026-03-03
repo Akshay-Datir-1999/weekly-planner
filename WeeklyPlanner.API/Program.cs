@@ -1,44 +1,47 @@
+using Microsoft.EntityFrameworkCore;
+using WeeklyPlanner.API.Middleware;
+using WeeklyPlanner.Core.Interfaces;
+using WeeklyPlanner.Infrastructure.Data;
+using WeeklyPlanner.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// ── Database ──────────────────────────────────────────────────────────────
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ── Register Services (Dependency Injection) ──────────────────────────────
+builder.Services.AddScoped<IBacklogService, BacklogService>();
+builder.Services.AddScoped<IWeekCycleService, WeekCycleService>();
+builder.Services.AddScoped<IPlanService, PlanService>();
+
+// ── Controllers + Swagger ─────────────────────────────────────────────────
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+    c.SwaggerDoc("v1", new() { Title = "Weekly Planner API", Version = "v1" }));
+
+// ── CORS ──────────────────────────────────────────────────────────────────
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+    policy.WithOrigins(
+        "http://localhost:4200",
+        "https://localhost:4200",
+        "https://YOUR-APP.azurestaticapps.net"  // update on Day 4
+    ).AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// ── Auto-apply migrations on startup ──────────────────────────────────────
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// ── Middleware pipeline — ORDER MATTERS ───────────────────────────────────
+app.UseMiddleware<ExceptionMiddleware>();  // must be first
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseCors();
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
