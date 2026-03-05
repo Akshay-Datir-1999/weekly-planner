@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { Member } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class RoleService {
   private members: Member[] = [
-    { id: 1, name: 'Team Lead', isLead: true },
-    { id: 2, name: 'Alice', isLead: false },
-    { id: 3, name: 'Bob', isLead: false },
+    { id: 1, name: 'Team Lead', isLead: true, isActive: true },
+    { id: 2, name: 'Alice', isLead: false, isActive: true },
+    { id: 3, name: 'Bob', isLead: false, isActive: true },
   ];
-  private current = new BehaviorSubject<Member>(this.members[0]);
-  currentMember$ = this.current.asObservable();
 
-  getMembers(): Member[] { return this.members; }
-  getCurrent(): Member { return this.current.value; }
-  switchTo(m: Member): void { this.current.next(m); }
-  isLead(): boolean { return this.current.value.isLead; }
+  private current = this.members[0];
+
+  getAll() {
+    return this.members;
+  }
+  getCurrent() {
+    return this.current;
+  }
+  setCurrent(id: number) {
+    this.current = this.members.find((m) => m.id === id) ?? this.members[0];
+  }
 }

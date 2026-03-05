@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { PlanEntry, WeeklyPlan } from '../models';
 import { environment } from '../../environments/environment';
-import { PlanEntry, WeeklyPlan, DashboardEntry } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class PlanService {
@@ -11,13 +11,19 @@ export class PlanService {
   getPlan(memberId: number, weekCycleId: number) {
     return this.http.get<WeeklyPlan>(`${this.api}/plan/${memberId}/${weekCycleId}`);
   }
+
   submitPlan(memberId: number, weekCycleId: number, entries: PlanEntry[]) {
-    return this.http.post<WeeklyPlan>(`${this.api}/plan/submit`, { memberId, weekCycleId, entries });
+    return this.http.post<WeeklyPlan>(`${this.api}/plan`, { memberId, weekCycleId, entries });
   }
-  updateProgress(entryId: number, progressPercent: number, actualHours?: number) {
-    return this.http.put(`${this.api}/plan/progress/${entryId}`, { progressPercent, actualHours });
+
+  updateProgress(planEntryId: number, progressPercent: number, actualHours: number) {
+    return this.http.put(`${this.api}/plan/entry/${planEntryId}/progress`, {
+      progressPercent,
+      actualHours,
+    });
   }
-  getDashboard(weekCycleId: number) {
-    return this.http.get<DashboardEntry[]>(`${this.api}/plan/week/${weekCycleId}/dashboard`);
+
+  getAllPlansForWeek(weekCycleId: number) {
+    return this.http.get<WeeklyPlan[]>(`${this.api}/plan/week/${weekCycleId}`);
   }
 }
