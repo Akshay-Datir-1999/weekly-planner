@@ -4,7 +4,7 @@ using WeeklyPlanner.Core.Interfaces;
 using WeeklyPlanner.Infrastructure.Data;
 using WeeklyPlanner.Infrastructure.Services;
 
-var builder = WebApplicationBuilder.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 // ── Database Configuration (SQLite) ───────────────────────────────────────
 // Get database path from environment variable or use default
@@ -38,7 +38,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Weekly Planner API", Version = "v1" });
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Weekly Planner API", Version = "v1" });
 });
 
 // ── CORS Configuration ────────────────────────────────────────────────────
