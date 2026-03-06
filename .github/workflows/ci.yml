@@ -1,4 +1,4 @@
-name: CI — Build & Test
+name: CI/CD — Build, Test & Deploy
 
 on:
   push:
@@ -8,15 +8,13 @@ on:
 
 jobs:
   # ─────────────────────────────────────────
-  # JOB 1: Backend — .NET Build + Tests
+  # JOB 1: Backend — Build + Test
   # ─────────────────────────────────────────
   backend-ci:
     name: Backend — Build & Test
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
@@ -29,7 +27,7 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run tests with coverage
+      - name: Run tests
         run: >
           dotnet test
           --no-build
@@ -46,35 +44,3 @@ jobs:
           path: |
             ./coverage/**
             ./**/*.trx
-
-  # ─────────────────────────────────────────
-  # JOB 2: Frontend — Angular Build
-  # ─────────────────────────────────────────
-  frontend-ci:
-    name: Frontend — Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-          cache-dependency-path: weekly-planner-ui/package-lock.json
-
-      - name: Install dependencies
-        working-directory: weekly-planner-ui
-        run: npm ci
-
-      - name: Build Angular app
-        working-directory: weekly-planner-ui
-        run: npm run build -- --configuration production
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build
-          path: weekly-planner-ui/dist/
