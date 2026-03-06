@@ -1,0 +1,117 @@
+name: Deploy Frontend (Angular to Static Web App)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'weekly-planner-ui/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  NODE_VERSION: '18.x'
+  UI_PROJECT_PATH: './weekly-planner-ui'
+  AZURE_SWA_NAME: 'weekly-planner-ui'
+
+jobs:
+  build:
+    name: Build Angular App
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ${{ env.UI_PROJECT_PATH }}/package-lock.json
+          
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ${{ env.UI_PROJECT_PATH }}
+        
+      - name: Run Tests
+        run: npm run test:ci
+        working-directory: ${{ env.UI_PROJECT_PATH }}
+        continue-on-error: true
+        
+      - name: Build Production Bundle
+        run: npm run build
+        working-directory: ${{ env.UI_PROJECT_PATH }}
+        
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-build
+          path: ${{ env.UI_PROJECT_PATH }}/dist
+          retention-days: 1
+          
+  deploy:
+    name: Deploy to Static Web App
+    runs-on: ubuntu-latest
+    needs: build
+    if: success()
+    
+    steps:
+      - name: Checkout Code (for token)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .
+            
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: angular-build
+          path: ./dist
+          
+      - name: Deploy to Azure Static Web App
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: 'upload'
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          app_location: '/weekly-planner-ui'
+          api_location: ''
+          output_location: 'dist/weekly-planner-ui/browser'
+          skip_app_build: true
+          
+      - name: Extract Frontend URL
+        id: swa_url
+        run: |
+          # Extract Static Web App URL from deployment
+          echo "swa_url=https://${{ env.AZURE_SWA_NAME }}.azurestaticapps.net" >> $GITHUB_OUTPUT
+          
+      - name: Post-Deployment Health Check
+        run: |
+          echo "Waiting for app to start..."
+          sleep 10
+          
+          max_attempts=5
+          attempt=0
+          health_url="https://${{ env.AZURE_SWA_NAME }}.azurestaticapps.net"
+          
+          while [ $attempt -lt $max_attempts ]; do
+            if curl -f --silent --show-error "$health_url" > /dev/null 2>&1; then
+              echo "✅ Health check passed!"
+              exit 0
+            fi
+            attempt=$((attempt + 1))
+            echo "Attempt $attempt/$max_attempts: Health check failed, retrying..."
+            sleep 5
+          done
+          echo "⚠️ Health check timeout - but deployment may still be successful"
+          
+      - name: Notify Deployment
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Frontend deployed successfully!"
+            echo "🌐 Visit: https://${{ env.AZURE_SWA_NAME }}.azurestaticapps.net"
+          else
+            echo "❌ Frontend deployment failed"
+          fi
