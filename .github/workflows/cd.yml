@@ -1,4 +1,4 @@
-name: CD — Deploy to Azure
+name: CD — Deploy Frontend to Azure
 
 on:
   push:
@@ -8,9 +8,7 @@ jobs:
   deploy-frontend:
     name: Deploy Angular → Azure
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,15 +27,9 @@ jobs:
         working-directory: weekly-planner-ui
         run: npm run build -- --configuration production
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7B4DDFA5DC2747A5948EC915AC78F0E8 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F1B10DEA64B84CFA8956B01676266D02 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_69955EE110324AB3AC3FB638A8315876 }}
-
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
           app-name: weekly-planner-ui-akshay
+          publish-profile: ${{ secrets.AZURE_UI_PUBLISH_PROFILE }}
           package: weekly-planner-ui/dist/weekly-planner-ui/browser
