@@ -4,12 +4,22 @@ using WeeklyPlanner.Core.Interfaces;
 using WeeklyPlanner.Infrastructure.Data;
 using WeeklyPlanner.Infrastructure.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplicationBuilder.CreateBuilder(args);
 
 // ── Database Configuration (SQLite) ───────────────────────────────────────
+// Get database path from environment variable or use default
+var dbPath = Environment.GetEnvironmentVariable("DB_PATH") ?? 
+             Path.Combine(Directory.GetCurrentDirectory(), "app_data");
+
+// Create app_data directory if it doesn't exist
+Directory.CreateDirectory(dbPath);
+
+// Build SQLite connection string
+var dbFilePath = Path.Combine(dbPath, "weekly-planner.db");
+var connectionString = $"Data Source={dbFilePath};";
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(connectionString));
 
 // ── Register Services (Dependency Injection) ──────────────────────────────
 builder.Services.AddScoped<IBacklogService, BacklogService>();
@@ -39,7 +49,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
                 "http://localhost:4200",
                 "https://localhost:4200",
-                "https://YOUR-APP.azurestaticapps.net"
+                "https://weekly-planner-ui-akshay.azurewebsites.net"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
