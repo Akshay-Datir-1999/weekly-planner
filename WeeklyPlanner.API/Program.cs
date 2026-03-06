@@ -49,7 +49,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
                 "http://localhost:4200",
                 "https://localhost:4200",
-                "https://weekly-planner-ui-akshay.azurewebsites.net"
+                "https://weekly-planner-ui-akshay.azurewebsites.net",
+                "https://ambitious-flower-08c08c400.4.azurestaticapps.net"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
