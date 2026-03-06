@@ -5,48 +5,14 @@ on:
     branches: [ main ]
 
 jobs:
-  # ─────────────────────────────────────────
-  # JOB 1: Deploy Backend → Azure App Service
-  # ─────────────────────────────────────────
-  deploy-backend:
-    name: Deploy .NET API → Azure App Service
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build & Publish
-        run: >
-          dotnet publish WeeklyPlanner.API/WeeklyPlanner.API.csproj
-          --configuration Release
-          --output ./publish
-
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./publish
-
-  # ─────────────────────────────────────────
-  # JOB 2: Deploy Frontend → Azure Static Web Apps
-  # ─────────────────────────────────────────
   deploy-frontend:
-    name: Deploy Angular → Azure Static Web Apps
+    name: Deploy Angular → Azure
     runs-on: ubuntu-latest
-
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -57,17 +23,21 @@ jobs:
 
       - name: Install dependencies
         working-directory: weekly-planner-ui
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
-      - name: Build Angular app (production)
+      - name: Build Angular app
         working-directory: weekly-planner-ui
         run: npm run build -- --configuration production
 
-      - name: Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
+      - name: Login to Azure
+        uses: azure/login@v2
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: upload
-          app_location: weekly-planner-ui
-          output_location: dist/weekly-planner-ui/browser
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7B4DDFA5DC2747A5948EC915AC78F0E8 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F1B10DEA64B84CFA8956B01676266D02 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_69955EE110324AB3AC3FB638A8315876 }}
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: weekly-planner-ui-akshay
+          package: weekly-planner-ui/dist/weekly-planner-ui/browser
