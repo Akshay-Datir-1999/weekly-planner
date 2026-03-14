@@ -1,20 +1,20 @@
-# 📅 Weekly Plan Tracker
+#  Weekly Plan Tracker
 
 > A full-stack weekly planning tool for development teams — built with .NET 8 and Angular 21.
 
 ---
 
-## 🌐 Live Deployment
+##  Live Deployment
 
 | | URL |
 |---|---|
-| 🖥️ **Frontend** | [https://weekly-planner-ui-olive.vercel.app](https://weekly-planner-ui-olive.vercel.app) |
-| 🔗 **API** | [https://weekly-planner-api-akshay.azurewebsites.net](https://weekly-planner-api-akshay.azurewebsites.net) |
-| 📖 **Swagger** | [/swagger](https://weekly-planner-api-akshay.azurewebsites.net/swagger) |
+|  **Frontend** | [https://mango-river-0a9a03300.6.azurestaticapps.net](https://mango-river-0a9a03300.6.azurestaticapps.net) |
+|  **API** | [https://weekly-planner-api-new.azurewebsites.net](https://weekly-planner-api-new.azurewebsites.net) |
+|  **Swagger** | [/swagger/index.html](https://weekly-planner-api-new.azurewebsites.net/swagger/index.html) |
 
 ---
 
-## 📖 About the App
+##  About the App
 
 Weekly Plan Tracker helps development teams plan and track their weekly work with structured hour budgets across business categories.
 
@@ -22,7 +22,7 @@ A **Team Lead** sets up a planning week by choosing a Tuesday date and splitting
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -34,16 +34,16 @@ A **Team Lead** sets up a planning week by choosing a Tuesday date and splitting
 | **Backend Tests** | xUnit, FluentAssertions, Moq, EF Core InMemory |
 | **Frontend Tests** | Vitest v4, Angular Testing Library |
 | **Backend Hosting** | Azure App Service |
-| **Frontend Hosting** | Vercel |
+| **Frontend Hosting** | Azure Static Web Apps |
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Angular 21 SPA                        │
-│           (Vercel — weekly-planner-ui-olive)             │
+│         (Azure Static Web Apps — mango-river)            │
 └────────────────────────┬────────────────────────────────┘
                          │ HTTPS REST (JSON)
                          │ X-Role header (lead / member)
@@ -65,7 +65,18 @@ Layers:
 
 ---
 
-## 📁 Project Structure
+##  CI/CD Pipelines
+
+| Pipeline | Trigger | Platform |
+|---|---|---|
+| **Backend** | Push to `main` | Azure App Service via GitHub Actions |
+| **Frontend** | Push to `main` | Azure Static Web Apps via GitHub Actions |
+
+Both pipelines are configured in `.github/workflows/` and deploy automatically on every push to the `main` branch.
+
+---
+
+##  Project Structure
 
 ```
 Weekly-Planner/
@@ -147,7 +158,6 @@ Weekly-Planner/
 │   │   ├── index.html
 │   │   ├── main.ts
 │   │   └── styles.scss                        # Global styles
-│   ├── vercel.json                            # Vercel routing + build config
 │   ├── angular.json
 │   ├── vitest.config.ts                       # Vitest test configuration
 │   ├── tsconfig.json
@@ -158,7 +168,7 @@ Weekly-Planner/
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 ### Members
 | Method | Endpoint | Description |
@@ -194,11 +204,11 @@ Weekly-Planner/
 | DELETE | `/api/Plan/{memberId}/{weekCycleId}` | Delete a member's plan (dev only) |
 | DELETE | `/api/Plan/admin/reset` | Wipe all plans (dev only) |
 
-> 🔒 **Lead-only endpoints** require the `X-Role: lead` header, injected automatically by Angular's `RoleInterceptor`.
+>  **Lead-only endpoints** require the `X-Role: lead` header, injected automatically by Angular's `RoleInterceptor`.
 
 ---
 
-## 🗂️ Domain Models
+##  Domain Models
 
 ### BacklogItem
 | Field | Type | Description |
@@ -230,7 +240,7 @@ Weekly-Planner/
 
 ---
 
-## 🚀 Running Locally
+##  Running Locally
 
 ### Prerequisites
 - .NET 8 SDK
@@ -253,11 +263,11 @@ ng serve
 # App: http://localhost:4200
 ```
 
-> ⚠️ Stop the API (`Ctrl+C`) before running backend tests.
+>  Stop the API (`Ctrl+C`) before running backend tests.
 
 ---
 
-## 🧪 Running Tests
+##  Running Tests
 
 ### Backend
 ```bash
@@ -291,7 +301,7 @@ npx vitest run --coverage
 
 ---
 
-## 🧠 Key Design Decisions
+##  Key Design Decisions
 
 **1. Role via HTTP Header**
 Instead of authentication, a lightweight `X-Role: lead` header is injected by Angular's `RoleInterceptor` when the selected role is Lead. The API reads this via `RequestContext.IsLead()` to gate lead-only endpoints such as setting category percentages and viewing the dashboard.
@@ -313,28 +323,17 @@ Backend tests use `Microsoft.EntityFrameworkCore.InMemory` to test services and 
 
 ---
 
-## ⚙️ Deployment
+##  Deployment
 
 ### Backend — Azure App Service
-Deployed via GitHub Actions on push to `main`.
+Deployed via GitHub Actions (`Backend` pipeline) on push to `main`.
 
-### Frontend — Vercel
-```bash
-cd weekly-planner-ui
-npm run build
-vercel --prod
-```
-
-The `vercel.json` handles:
-- Install command: `npm install --legacy-peer-deps`
-- Build command: `ng build --configuration production`
-- Output directory: `dist/weekly-planner-ui/browser`
-- SPA routing: all paths fall back to `index.html`
-- Static assets (`.js`, `.css`, `.ico`) served with correct MIME types
+### Frontend — Azure Static Web Apps
+Deployed via GitHub Actions (`Frontend` pipeline) on push to `main`.
 
 ---
 
-## 👤 Author
+##  Author
 
 **Akshay Datir**
-- Live app: [weekly-planner-ui-olive.vercel.app](https://weekly-planner-ui-olive.vercel.app)
+- Live app: [mango-river-0a9a03300.6.azurestaticapps.net](https://mango-river-0a9a03300.6.azurestaticapps.net)
