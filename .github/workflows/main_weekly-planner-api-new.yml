@@ -1,0 +1,32 @@
+name: Build and deploy ASP.Net Core app to Azure Web App - weekly-planner-api-new
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore WeeklyPlanner.API/WeeklyPlanner.API.csproj
+
+      - name: Build & Publish
+        run: dotnet publish WeeklyPlanner.API/WeeklyPlanner.API.csproj --configuration Release --output ./publish
+
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: weekly-planner-api-new
+          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE_NEW }}
+          package: ./publish
