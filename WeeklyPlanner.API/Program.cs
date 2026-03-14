@@ -50,7 +50,8 @@ builder.Services.AddCors(options =>
                 "http://localhost:4200",
                 "https://localhost:4200",
                 "https://weekly-planner-ui-akshay.azurewebsites.net",
-                "https://ambitious-flower-08c08c400.4.azurestaticapps.net"
+                "https://ambitious-flower-08c08c400.4.azurestaticapps.net",
+                "https://mango-river-0a9a03300.6.azurestaticapps.net"  // ← NEW
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -77,3 +78,10 @@ app.UseCors();
 app.MapControllers();
 
 app.Run();
+```
+
+---
+
+**Only 1 line was added** — the new frontend URL in CORS:
+```
+"https://mango-river-0a9a03300.6.azurestaticapps.net"
