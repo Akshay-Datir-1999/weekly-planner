@@ -6,7 +6,7 @@ using WeeklyPlanner.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dbPath = Environment.GetEnvironmentVariable("DB_PATH") ?? 
+var dbPath = Environment.GetEnvironmentVariable("DB_PATH") ??
              Path.Combine(Directory.GetCurrentDirectory(), "app_data");
 
 Directory.CreateDirectory(dbPath);
